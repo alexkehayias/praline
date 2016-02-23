@@ -12,6 +12,7 @@
   height: 100%;
   overflow: auto;
   width: 300px;
+  top: 0;
 }
 
 #praline p {

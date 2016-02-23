@@ -7,24 +7,28 @@
   [:input {:type "number"
            :on-change (fn [e]
                         (.preventDefault e)
-                        (swap! state
-                               assoc-in
-                               key-path
-                               (int (-> e .-target .-value)))
+                        (swap! state assoc-in key-path (int (-> e .-target .-value)))
                         nil)
-           :default-value n
+           :value n
            :style {:width "80%"}}])
 
 (defn input-keyword [state key-path kw]
   [:input {:type "text"
            :on-change (fn [e]
                         (.preventDefault e)
-                        (swap! state
-                               assoc-in
-                               key-path
+                        (swap! state assoc-in key-path update
                                (-> (-> e .-target .-value)
                                    (st/replace  ":" "")
                                    keyword))
                         nil)
-           :default-value kw
+           :value kw
+           :style {:width "80%"}}])
+
+(defn input-string [state key-path kw]
+  [:input {:type "text"
+           :on-change (fn [e]
+                        (.preventDefault e)
+                        (swap! state assoc-in key-path (-> e .-target .-value))
+                        nil)
+           :value kw
            :style {:width "80%"}}])
