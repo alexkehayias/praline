@@ -1,5 +1,6 @@
 (ns ^:figwheel-always praline.core
     (:require [clojure.set :refer [difference union]]
+              [goog.string :as gs]
               [reagent.core :as reagent :refer [atom]]
               [praline.styles :refer [default-style]]
               [praline.mock :refer [mock-state]]
@@ -34,7 +35,7 @@
           child-paths (map #(conj key-path %) (keys this))]
       [:div.row.gutter
        [:div.grid.twelve
-        [:h3 {:on-click (handle-show-path child-paths app-state)} label]
+        [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
         (for [[k v] this
               :when (some #{(conj key-path k)} visible)]
           ^{:key k}
@@ -47,7 +48,7 @@
           child-paths (map #(conj key-path %) (keys this))]
       [:div.row.gutter
        [:div.grid.twelve
-        [:h3 {:on-click (handle-show-path child-paths app-state)} label]
+        [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
         (for [[k v] this
               :when (some #{(conj key-path k)} visible)]
           ^{:key k}
@@ -86,14 +87,17 @@
   (inspect [this label key-path app-state state]
     [:div.row.gutter
      [:div.grid.four [:p [:b label]]]
-     [:div.grid.eight (str this)]]))
+     ;; Stringifying the function can cause hangs, for now just
+     ;; indicate that it's a function
+     [:div.grid.eight [:code "function"]]]))
 
 (extend-type object
   InspectComponent
   (inspect [this label key-path app-state state]
     [:div.row.gutter
      [:div.grid.four [:p [:b label]]]
-     [:div.grid.eight (str this)]]))
+     ;; For now str
+     [:div.grid.eight [:code "object"]]]))
 
 (extend-type string
   InspectComponent
@@ -111,8 +115,8 @@
 
 (defn inspector [state app-state]
   [:div
-   [:style default-style]
-   [inspect @state "Inspector" [] app-state state]])
+   [:style {:dangerouslySetInnerHTML default-style}]
+   [inspect @state "@" [] app-state state]])
 
 (defn mount-inspector
   "Mount the inspector to the DOM. Safe to call multiple times"

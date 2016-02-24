@@ -1,18 +1,27 @@
 (ns praline.styles
   "Provides inline styling of the inspector to avoid having to setup css files")
 
-
+;; TODO make this configurable
 (def default-style
   "
 #praline {
   font-family: helvetica, arial, sans-serif;
   z-index: 999999;
   right: 0;
-  position: absolute;
+  position: fixed;
   height: 100%;
   overflow: auto;
-  width: 300px;
+  width: auto;
+  max-width: 300px;
   top: 0;
+}
+
+/*Sets the background for the transparency of nested elements in the inspector*/
+#praline > :first-child {
+  background: #1589FF !important;
+  padding-bottom: 0.5em;
+  border-left: 1px solid #1e1e1e;
+  border-bottom: 1px solid #1e1e1e;
 }
 
 #praline p {
@@ -20,27 +29,27 @@
   padding: 4px;
 }
 
-#praline h2 {
-  color: black;
-  font-size: 21px;
-  margin: 0.5em 0.2em;
-}
-
 #praline .row {
   display: flex;
+}
+
+#praline .row :first-child {
+  padding-right: 0.5em;
 }
 
 #praline .row .gutter {
   padding: 0em 0 0.5em 0.5em;
 }
 
-#praline .row.center {
+#praline .row .center {
   align-items: center;
   text-align: center;
 }
 
 #praline .row .grid {
-  background: rgba(0,0,0,.1);
+  color: #eeeeee;
+  background-color: #373737;
+  background: rgba(0,0,0,.4);
 }
 
 #praline .row .grid.cell{
@@ -80,10 +89,13 @@
   flex: 0 0 100%;
 }
 
-#praline .row h3 {
+#praline .row .parent {
+  font-size: 1.17em;
+  font-weight: bold;
   padding: 1em 0 0.5em 0.5em;
   margin: 0;
   text-transform: capitalize;
+  cursor: pointer;
 }
 
 ")
