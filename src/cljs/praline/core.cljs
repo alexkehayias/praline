@@ -36,7 +36,7 @@
       [:div.row.gutter
        [:div.grid.twelve
         [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
-        (for [[k v] this
+        (for [[k v] (sort-by (comp name first) (seq this))
               :when (some #{(conj key-path k)} visible)]
           ^{:key k}
           [inspect v (name k) (conj key-path k) app-state state])]])))
@@ -49,7 +49,7 @@
       [:div.row.gutter
        [:div.grid.twelve
         [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
-        (for [[k v] this
+        (for [[k v] (sort-by (comp name first) (seq this))
               :when (some #{(conj key-path k)} visible)]
           ^{:key k}
           [inspect v (name k) (conj key-path k) app-state state])]])))
