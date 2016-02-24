@@ -115,7 +115,7 @@
 
 (defn inspector [state app-state]
   [:div
-   [:style {:dangerouslySetInnerHTML default-style}]
+   [:style {:dangerouslySetInnerHTML {:__html default-style}}]
    [inspect @state "@" [] app-state state]])
 
 (defn mount-inspector
@@ -128,11 +128,11 @@
     (.appendChild (.-body js/document) el)
     (reagent/render [inspector state app-state] el)))
 
-(defn mk-inspector-state
+(defn inspector-state
   "Returns a state atom that is used by the inspector"
   [init]
   (atom init))
 
-(defn mk-inspector-app-state
+(defn inspector-app-state
   []
   (atom {:visible #{}}))
