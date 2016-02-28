@@ -50,6 +50,7 @@
   color: #eeeeee;
   background-color: #373737;
   background: rgba(0,0,0,.4);
+  word-wrap: break-word;
 }
 
 #praline .row .grid.cell{

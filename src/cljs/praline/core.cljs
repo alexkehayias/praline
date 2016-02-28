@@ -57,16 +57,32 @@
 (extend-type PersistentVector
   InspectComponent
   (inspect [this label key-path app-state state]
-    [:div.row.gutter
-     [:div.grid.twelve
-      (for [i this]
-        ^{:key i}
-        [inspect i nil key-path app-state state])]]) )
+    (let [visible (:visible @app-state)
+          child-paths (map #(conj key-path %) (range (count this)))]
+      [:div.row.gutter
+       [:div.grid.twelve
+        [:div.parent
+         {:on-click (handle-show-path (range (count this)) app-state)} label]
+        (for [[indx i] (map-indexed vector this)
+              :let [next-key-path (conj key-path indx)]
+              :when (some #{next-key-path} visible)]
+          ^{:key next-key-path}
+          [inspect i (str indx) next-key-path app-state state])]])))
 
 (extend-type PersistentHashSet
   InspectComponent
   (inspect [this label key-path app-state state]
-    (assert false "Not implemented!")))
+    (let [visible (:visible @app-state)
+          child-paths (map #(conj key-path %) (range (count this)))]
+      [:div.row.gutter
+       [:div.grid.twelve
+        [:div.parent
+         {:on-click (handle-show-path child-paths app-state)} label]
+        (for [[indx i] (map-indexed vector this)
+              :let [next-key-path (conj key-path indx)]
+              :when (some #{next-key-path} visible)]
+          ^{:key next-key-path}
+          [inspect i (str indx) next-key-path app-state state])]])))
 
 (extend-type number
   InspectComponent
