@@ -62,7 +62,10 @@
       [:div.row.gutter
        [:div.grid.twelve
         [:div.parent
-         {:on-click (handle-show-path (range (count this)) app-state)} label]
+         {:on-click (handle-show-path
+                     (map #(conj key-path %) (range (count this)))
+                     app-state)}
+         label]
         (for [[indx i] (map-indexed vector this)
               :let [next-key-path (conj key-path indx)]
               :when (some #{next-key-path} visible)]
