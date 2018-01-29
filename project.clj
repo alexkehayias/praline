@@ -1,5 +1,5 @@
-(defproject praline "0.1.0-SNAPSHOT"
-  :description "A wrapper around the Chocolatier game engine that provides inspection tools"
+(defproject praline "0.1.1-SNAPSHOT"
+  :description "A wrapper around reagent atom that provides an automated inspection UI"
   :source-paths ["src/clj" "src/cljs"]
   :test-paths ["test/clj" "test/cljs"]
   :dependencies [[org.clojure/clojure "1.7.0"]

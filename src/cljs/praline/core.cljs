@@ -36,10 +36,10 @@
       [:div.row.gutter
        [:div.grid.twelve
         [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
-        (for [[k v] (sort-by (comp name first) (seq this))
+        (for [[k v] (sort-by first (seq this))
               :when (some #{(conj key-path k)} visible)]
           ^{:key k}
-          [inspect v (name k) (conj key-path k) app-state state])]])))
+          [inspect v k (conj key-path k) app-state state])]])))
 
 (extend-type PersistentHashMap
   InspectComponent
@@ -49,10 +49,10 @@
       [:div.row.gutter
        [:div.grid.twelve
         [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
-        (for [[k v] (sort-by (comp name first) (seq this))
+        (for [[k v] (sort-by first (seq this))
               :when (some #{(conj key-path k)} visible)]
           ^{:key k}
-          [inspect v (name k) (conj key-path k) app-state state])]])))
+          [inspect v k (conj key-path k) app-state state])]])))
 
 (extend-type PersistentVector
   InspectComponent
@@ -131,6 +131,34 @@
     [:div.row.gutter
      [:div.grid.four [:p [:b label]]]
      [:div.grid.eight (str this)]]))
+
+(extend-type PersistentTreeMap
+  InspectComponent
+  (inspect [this label key-path app-state state]
+    (let [visible (:visible @app-state)
+          child-paths (map #(conj key-path %) (keys this))]
+      [:div.row.gutter
+       [:div.grid.twelve
+        [:div.parent {:on-click (handle-show-path child-paths app-state)} label]
+        (for [[k v] (sort-by (comp name first) (seq this))
+              :when (some #{(conj key-path k)} visible)]
+          ^{:key k}
+          [inspect v (name k) (conj key-path k) app-state state])]])))
+
+(extend-type UUID
+  INamed
+  (-name [this]
+    (str this))
+
+  (-namespace [this]
+    nil))
+
+(extend-type UUID
+  InspectComponent
+  (inspect [this label key-path app-state state]
+    [:div.row.gutter
+     [:div.grid.four [:p [:b label]]]
+     [:div.grid.eight [input-string state key-path this]]]))
 
 (defn inspector [state app-state]
   [:div
